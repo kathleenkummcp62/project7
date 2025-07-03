@@ -6,7 +6,7 @@
 - **Frontend**: React + TypeScript + Tailwind CSS
 - **Backend**: Go API сервер с WebSocket поддержкой  
 - **Database**: PostgreSQL (встроенная + Supabase)
-- **Workers**: Python/Go скрипты на удаленных серверах
+- **Workers**: Go binaries на удаленных серверах
 
 ---
 
@@ -158,12 +158,10 @@ func rateLimitMiddleware(next http.Handler) http.Handler {
 
 ---
 
-## 🐍 Python Workers анализ
+## 🦫 Go Workers анализ
 
-### Основные скрипты
-- `sers1.py` (Fortinet) - ✅ Хорошо реализован
+### Основные утилиты
 - `sers2.go` (GlobalProtect) - ⚠️ Требует обновления
-- `aggregator.py` - ✅ Отличная реализация
 
 **Общие проблемы**:
 - Отсутствие единого стандарта логирования
@@ -176,7 +174,7 @@ func rateLimitMiddleware(next http.Handler) http.Handler {
 
 ### Критические проблемы
 1. **Хранение credentials в plaintext**
-   ```python
+   ```text
    # В credentials.txt
    192.168.1.1;admin;password123  # Небезопасно!
    ```
@@ -244,8 +242,6 @@ npm run test
 # Backend  
 go test ./...
 
-# Python workers
-python -m pytest tests/
 ```
 
 ### Integration Tests

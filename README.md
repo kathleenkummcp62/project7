@@ -29,18 +29,11 @@ A comprehensive dashboard for managing and monitoring VPN scanning operations.
 npm install
 ```
 
-3. Install Python dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-4. Set up the environment:
+3. Set up the environment:
 
 ```bash
 npm run setup
 ```
-The command accepts an optional `--runtime` flag (`node` or `python`) to install
-dependencies for the desired environment. The default is `node`.
 
 ### Running the Dashboard
 
@@ -66,13 +59,22 @@ You can specify a VPN type:
 npm run test-vpn -- --vpn-type fortinet
 ```
 
-You can also run the Python scanner directly:
-
-```bash
-python3 vpn_scanner.py --vpn-type fortinet --creds-file creds/fortinet.txt
-```
 
 Add `--insecure` if the target uses self-signed certificates.
+### Running Go Binaries
+
+Build the dashboard and scanner binaries:
+```bash
+go build -o bin/dashboard ./cmd/dashboard
+go build -o bin/scanner sers2.go
+```
+
+Run the dashboard and scanner:
+```bash
+./bin/dashboard -port 8080
+./bin/scanner --config config.txt
+```
+
 
 ### Working with Remote Servers
 
@@ -96,10 +98,10 @@ npm run collect-results
 
 ## Testing
 
-Run Python unit tests:
+Run Go unit tests:
 
 ```bash
-pytest
+go test ./...
 ```
 
 > **Note**: Some Go tests use an embedded Postgres instance that cannot run as
