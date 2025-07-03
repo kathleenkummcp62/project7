@@ -23,19 +23,26 @@ A comprehensive dashboard for managing and monitoring VPN scanning operations.
 ### Installation
 
 1. Clone the repository
-2. Install Node dependencies:
+2. Install dependencies:
 
 ```bash
+go mod download
 npm install
 ```
 
+ codex/update-runsetup-to-omit-pip-command
 
+
+ main
 3. Set up the environment:
 
 ```bash
-npm run setup
+go run ./cmd/setupenv
 ```
+ codex/update-runsetup-to-omit-pip-command
 The command installs all required Node and Go tooling.
+
+main
 
 ### Running the Dashboard
 
@@ -90,12 +97,6 @@ npm run collect-results
 ```
 
 ## Testing
-
-Run Python unit tests:
-
-```bash
-pytest
-```
 
 > **Note**: Some Go tests use an embedded Postgres instance that cannot run as
 > the root user. Run the test suite under a regular account.

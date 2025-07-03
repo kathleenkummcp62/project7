@@ -2,6 +2,10 @@ import importlib
 import sys
 import asyncio
 from types import SimpleNamespace
+from pathlib import Path
+
+# Ensure project root is on the module search path
+sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 import pytest
 
