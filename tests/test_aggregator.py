@@ -1,10 +1,10 @@
-import sys
 from pathlib import Path
+import subprocess
 
-sys.path.append(str(Path(__file__).resolve().parents[1]))
-
-from aggregator import human
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_human():
-    assert human(3661) == "01:01:01"
+    cmd = ["go", "run", str(ROOT / "aggregator.go"), "-human", "3661"]
+    out = subprocess.check_output(cmd)
+    assert out.decode().strip() == "01:01:01"
