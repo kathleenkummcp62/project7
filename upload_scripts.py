@@ -93,15 +93,6 @@ def upload_scripts(ip, username, password):
             sftp.close()
             uploaded_count += 1
         
-        # Загружаем VPN сканер
-        if os.path.exists("vpn_scanner.py"):
-            sftp = client.open_sftp()
-            remote_path = f"{args.remote_dir}/vpn_scanner.py"
-            sftp.put("vpn_scanner.py", remote_path)
-            sftp.chmod(remote_path, 0o755)
-            sftp.close()
-            uploaded_count += 1
-        
         client.close()
         print(f"✅ Загружено {uploaded_count} файлов на {ip}")
         return True

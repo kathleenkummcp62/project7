@@ -75,128 +75,19 @@ def prepare_worker(worker):
     client = connect_to_worker(worker)
     if not client:
         return False
-    
     try:
-        # Создаем необходимые директории
         stdin, stdout, stderr = client.exec_command("mkdir -p /root/NAM/Servis /root/NAM/Check")
         if stderr.read():
             print(f"⚠️ Предупреждение при создании директорий на {worker['ip']}")
-        
-        # Проверяем наличие Python и необходимых модулей
-        stdin, stdout, stderr = client.exec_command("python3 -c 'import aiohttp, asyncio, aiofiles' 2>/dev/null || echo 'missing'")
-        if stdout.read().decode().strip() == 'missing':
-            print(f"📦 Устанавливаем необходимые модули на {worker['ip']}...")
-            stdin, stdout, stderr = client.exec_command("pip3 install aiohttp aiofiles")
-            if stderr.read():
-                print(f"⚠️ Предупреждение при установке модулей на {worker['ip']}")
-        
-        # Загружаем тестовый сканер
-        sftp = client.open_sftp()
-        
-        # Создаем временный файл сканера
-        scanner_code = """#!/usr/bin/env python3
-import os
-import sys
-import json
-import time
-import random
-import asyncio
-import aiohttp
-import aiofiles
-import argparse
-from pathlib import Path
 
-# Аргументы командной строки
-parser = argparse.ArgumentParser(description="VPN Scanner")
-parser.add_argument("--vpn-type", required=True, help="Тип VPN")
-parser.add_argument("--creds-file", required=True, help="Файл с учетными данными")
-parser.add_argument("--output", default="valid.txt", help="Файл для результатов")
-args = parser.parse_args()
-
-# Загрузка учетных данных
-with open(args.creds_file, "r") as f:
-    credentials = [line.strip() for line in f if line.strip() and not line.startswith("#")]
-
-# Статистика
-stats = {
-    "goods": 0,
-    "bads": 0,
-    "errors": 0,
-    "offline": 0,
-    "ipblock": 0,
-    "processed": 0,
-    "rps": 0
-}
-
-# Файл для статистики
-stats_file = f"stats_{os.getpid()}.json"
-
-# Симуляция сканирования
-async def main():
-    print(f"🚀 Запуск сканера {args.vpn_type.upper()}")
-    print(f"📊 Загружено {len(credentials)} учетных данных")
-    
-    start_time = time.time()
-    
-    # Открываем файл для валидных учетных данных
-    async with aiofiles.open(args.output, "w") as valid_file:
-        # Обрабатываем каждую учетную запись
-        for cred in credentials:
-            # Симулируем задержку
-            await asyncio.sleep(random.uniform(0.5, 2.0))
-            
-            # Симулируем результат (для демонстрации)
-            result = random.choice(["valid", "invalid", "error", "offline"])
-            
-            if result == "valid":
-                stats["goods"] += 1
-                await valid_file.write(f"{cred}\\n")
-                print(f"✅ VALID: {cred}")
-            elif result == "invalid":
-                stats["bads"] += 1
-                print(f"❌ INVALID: {cred}")
-            elif result == "error":
-                stats["errors"] += 1
-                print(f"⚠️ ERROR: {cred}")
-            elif result == "offline":
-                stats["offline"] += 1
-                print(f"🔌 OFFLINE: {cred}")
-            
-            stats["processed"] += 1
-            stats["rps"] = stats["processed"] / (time.time() - start_time)
-            
-            # Обновляем статистику
-            with open(stats_file, "w") as f:
-                json.dump(stats, f)
-            
-            # Выводим текущую статистику
-            print(f"\\r🔥 G:{stats['goods']} B:{stats['bads']} E:{stats['errors']} Off:{stats['offline']} Blk:{stats['ipblock']} | ⚡{stats['rps']:.1f}/s | ⏱️{int(time.time() - start_time)}s", end="")
-    
-    print("\\n✅ Сканирование завершено!")
-
-if __name__ == "__main__":
-    asyncio.run(main())
-"""
-        
-        temp_scanner = Path("temp_scanner.py")
-        with open(temp_scanner, "w") as f:
-            f.write(scanner_code)
-        
-        sftp.put(str(temp_scanner), "/root/NAM/Servis/vpn_scanner.py")
-        sftp.chmod("/root/NAM/Servis/vpn_scanner.py", 0o755)
-        
-        # Удаляем временный файл
-        os.remove(temp_scanner)
-        
-        sftp.close()
         client.close()
-        
         print(f"✅ Воркер {worker['ip']} подготовлен")
         return True
     except Exception as e:
         print(f"❌ Ошибка подготовки воркера {worker['ip']}: {e}")
         client.close()
         return False
+    
 
 # Создание файла с учетными данными для тестирования
 def create_credentials_file(worker, vendor, targets):
@@ -238,7 +129,10 @@ def run_test_task(worker, vendor, creds_file):
     try:
         # Запускаем сканер
         output_file = f"/root/NAM/Servis/valid_{vendor}.txt"
-        command = f"cd /root/NAM/Servis && python3 vpn_scanner.py --vpn-type {vendor} --creds-file {creds_file} --output {output_file}"
+        command = (
+            f"cd /root/NAM/Servis && go run cmd/vpn_scanner/main.go --vpn-type {vendor} "
+            f"--creds-file {creds_file} --output {output_file}"
+        )
         
         print(f"🚀 Запуск задания {vendor} на {worker['ip']}...")
         stdin, stdout, stderr = client.exec_command(command)
@@ -247,7 +141,7 @@ def run_test_task(worker, vendor, creds_file):
         time.sleep(5)
         
         # Проверяем, запустился ли процесс
-        stdin, stdout, stderr = client.exec_command("ps aux | grep vpn_scanner | grep -v grep")
+        stdin, stdout, stderr = client.exec_command("ps aux | grep vpn_scanner/main.go | grep -v grep")
         if not stdout.read():
             print(f"❌ Задание {vendor} не запустилось на {worker['ip']}")
             client.close()

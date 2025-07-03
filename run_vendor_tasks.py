@@ -26,8 +26,8 @@ VPN_SCRIPTS = {
     "paloalto": "sers2.go",
     "sonicwall": "sers3.py",
     "cisco": "sers4.go",
-    "sophos": "vpn_scanner.py --vpn-type sophos",
-    "watchguard": "vpn_scanner.py --vpn-type watchguard"
+    "sophos": "cmd/vpn_scanner/main.go",
+    "watchguard": "cmd/vpn_scanner/main.go"
 }
 
 def parse_credentials(filename):
@@ -142,12 +142,15 @@ def run_vpn_task(ip, username, password, vpn_type):
         
         # Prepare command
         if script_cmd.endswith(".py"):
-            if "vpn_scanner.py" in script_cmd:
-                cmd = f"cd {args.remote_dir} && python3 {script_cmd} --creds-file {remote_creds_file} --output {args.remote_dir}/valid_{vpn_type}.txt"
-            else:
-                cmd = f"cd {args.remote_dir} && python3 {script_cmd}"
+            cmd = f"cd {args.remote_dir} && python3 {script_cmd}"
         elif script_cmd.endswith(".go"):
-            cmd = f"cd {args.remote_dir} && go run {script_cmd}"
+            if script_cmd == "cmd/vpn_scanner/main.go":
+                cmd = (
+                    f"cd {args.remote_dir} && go run {script_cmd} --vpn-type {vpn_type} "
+                    f"--creds-file {remote_creds_file} --output {args.remote_dir}/valid_{vpn_type}.txt"
+                )
+            else:
+                cmd = f"cd {args.remote_dir} && go run {script_cmd}"
         else:
             cmd = f"cd {args.remote_dir} && ./{script_cmd}"
         
