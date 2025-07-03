@@ -44,38 +44,31 @@ async function parseCredentialsFile(filePath) {
 // Get script name for VPN type
 function getScriptForVpnType(vpnType) {
   const scripts = {
-    'fortinet': 'sers1.py',
-    'paloalto': 'sers2.go',
-    'sonicwall': 'sers3.py',
-    'sophos': 'test_scanner.py --vpn-type sophos',
-    'watchguard': 'test_scanner.py --vpn-type watchguard',
-    'cisco': 'sers4.go'
+    fortinet: 'vpn-ultra-fast',
+    paloalto: 'vpn-ultra-fast',
+    sonicwall: 'vpn-ultra-fast',
+    sophos: 'vpn-ultra-fast',
+    watchguard: 'vpn-ultra-fast',
+    cisco: 'vpn-ultra-fast'
   };
-  
-  return scripts[vpnType.toLowerCase()] || `test_scanner.py --vpn-type ${vpnType}`;
+
+  return scripts[vpnType.toLowerCase()] || 'vpn-ultra-fast';
 }
 
 // Start scanner on a server
 async function startScannerOnServer(server, vpnType) {
   const { ip, username, password } = server;
   console.log(`\n🚀 Starting ${vpnType} scanner on ${ip}`);
-  
+
   try {
     // In a real implementation, this would use SSH
     // For this demo, we'll simulate success
-    
+
     const script = getScriptForVpnType(vpnType);
     const remoteDir = '/root/NAM/Servis';
-    
-    // Construct command
-    let cmd;
-    if (script.endsWith('.py')) {
-      cmd = `cd ${remoteDir} && python3 ${script}`;
-    } else if (script.endsWith('.go')) {
-      cmd = `cd ${remoteDir} && go run ${script}`;
-    } else {
-      cmd = `cd ${remoteDir} && ./${script}`;
-    }
+
+    // Construct command using the new Go binary
+    const cmd = `cd ${remoteDir} && ${script} --type ${vpnType}`;
     
     console.log(`📋 Command: ${cmd}`);
     

@@ -16,14 +16,14 @@ import (
 )
 
 func runSetup(cfgPath string) error {
-	cmds := []struct {
-		name string
-		args []string
-	}{
-		{"go", []string{"mod", "download"}},
-		{"npm", []string{"install"}},
-		{"python3", []string{"-m", "pip", "install", "-r", "requirements.txt"}},
-	}
+       cmds := []struct {
+               name string
+               args []string
+       }{
+               {"go", []string{"mod", "download"}},
+               {"go", []string{"build", "./..."}},
+               {"npm", []string{"install"}},
+       }
 	for _, c := range cmds {
 		cmd := exec.Command(c.name, c.args...)
 		cmd.Stdout = os.Stdout

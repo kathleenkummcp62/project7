@@ -243,11 +243,11 @@ async function main() {
     // Configure firewall
     await configureFirewall();
 
-    if (runtime === 'python') {
+    if (runtime === 'go') {
       try {
-        execSync('python3 -m pip install -r requirements.txt', { stdio: 'inherit' });
+        execSync('go mod download && go build ./...', { stdio: 'inherit' });
       } catch (err) {
-        console.log('⚠️ Failed to install Python dependencies:', err.message);
+        console.log('⚠️ Failed to build Go binaries:', err.message);
       }
     } else if (runtime === 'node') {
       try {
@@ -260,7 +260,7 @@ async function main() {
     console.log('\n✅ Environment setup completed successfully!');
     console.log('\nYou can now run the following commands:');
     console.log('  - npm run dev  (to start the dashboard)');
-    console.log('  - python3 test_scanner.py --vpn-type fortinet  (to test VPN scanning)');
+    console.log('  - vpn-ultra-fast --type fortinet  (to test VPN scanning)');
     
     return true;
   } catch (error) {
