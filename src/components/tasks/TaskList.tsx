@@ -14,7 +14,7 @@ import {
   XCircle,
   FileText
 } from 'lucide-react';
-import { Task } from '../../store/slices/tasksSlice';
+import { Task } from '../../types';
 
 interface TaskListProps {
   tasks: Task[];

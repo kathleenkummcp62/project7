@@ -11,7 +11,7 @@ import {
   AlertTriangle,
   Upload
 } from 'lucide-react';
-import { Task } from '../../store/slices/tasksSlice';
+import { Task } from '../../types';
 
 interface TaskFormProps {
   onSubmit: (task: Omit<Task, 'id' | 'status' | 'createdAt'>) => void;
