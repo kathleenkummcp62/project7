@@ -13,7 +13,11 @@
     "test:db": "vitest run tests/database_test.js",
     "test:api": "vitest run tests/api_test.js",
     "test:migration": "vitest run tests/migration_test.js",
-    "test:all": "vitest run"
+    "test:all": "vitest run",
+    "test-vpn": "node scripts/test-vpn.js",
+    "deploy-scripts": "node scripts/deploy-scripts.js",
+    "start-scanners": "node scripts/start-scanners.js",
+    "collect-results": "node scripts/collect-results.js"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
