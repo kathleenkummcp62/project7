@@ -7,6 +7,7 @@ toolchain go1.23.8
 require (
 	github.com/fergusstrange/embedded-postgres v1.31.0
 	github.com/gorilla/mux v1.8.1
+	github.com/gorilla/websocket v1.5.1
 	github.com/jackc/pgx/v5 v5.7.5
 	github.com/mattn/go-sqlite3 v1.14.28
 	github.com/pkg/sftp v1.13.9

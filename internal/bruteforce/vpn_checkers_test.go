@@ -6,11 +6,13 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"vpn-bruteforce-client/internal/config"
 )
 
 func TestCheckFortinetSuccess(t *testing.T) {
 	// Mock Fortinet server
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	srv := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			t.Errorf("unexpected method %s", r.Method)
 		}
@@ -19,8 +21,8 @@ func TestCheckFortinetSuccess(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	host := strings.TrimPrefix(srv.URL, "http://")
-	e := &Engine{client: srv.Client()}
+	host := strings.TrimPrefix(srv.URL, "https://")
+	e := &Engine{config: &config.Config{}, client: srv.Client()}
 	cred := Credential{IP: host, Username: "u", Password: "p"}
 
 	ok, err := e.checkFortinet(context.Background(), cred)
