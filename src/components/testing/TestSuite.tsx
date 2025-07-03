@@ -16,6 +16,8 @@ import {
   Shield
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { store } from '../../store';
+import { setActiveTab } from '../../store/slices/uiSlice';
 
 interface TestResult {
   id: string;
@@ -196,12 +198,20 @@ export function TestSuite() {
   };
 
   const testFrontendComponents = async (): Promise<TestResult> => {
-    // Проверяем наличие основных компонентов в DOM
     const components = ['dashboard', 'servers', 'vpn-types'];
-    const missingComponents = components.filter(comp => 
-      !document.querySelector(`[data-testid="${comp}"]`)
-    );
-    
+    const missingComponents: string[] = [];
+    const prevTab = store.getState().ui.activeTab;
+
+    for (const comp of components) {
+      store.dispatch(setActiveTab(comp));
+      await new Promise(resolve => setTimeout(resolve, 100));
+      if (!document.querySelector(`[data-testid="${comp}"]`)) {
+        missingComponents.push(comp);
+      }
+    }
+
+    store.dispatch(setActiveTab(prevTab));
+
     return {
       id: 'frontend-components',
       name: 'React Components Rendering',
