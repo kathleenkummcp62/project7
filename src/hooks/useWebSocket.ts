@@ -325,11 +325,12 @@ export function useWebSocket(url?: string) {
           dispatch(setStats(message.data as StatsData));
           break;
           
-        case 'server_info':
+        case 'server_info': {
           const serverData = message.data as ServerInfo[];
           dispatch(setServers(serverData));
           dispatch(updateServerHistory(serverData));
           break;
+        }
           
         case 'logs_data':
           setLogs(message.data as string[]);

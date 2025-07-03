@@ -231,7 +231,7 @@ export function FileUpload({
     }
     
     // Track overall progress
-    let totalSize = pendingFiles.reduce((sum, file) => sum + file.size, 0);
+    const totalSize = pendingFiles.reduce((sum, file) => sum + file.size, 0);
     let totalUploaded = 0;
     
     // Update overall progress

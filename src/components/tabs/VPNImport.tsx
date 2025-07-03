@@ -60,7 +60,7 @@ export function VPNImport() {
 
   const handleImport = (data: any[]) => {
     switch (importType) {
-      case 'credentials':
+      case 'credentials': {
         const newCredentials = data.map((item, index) => ({
           id: `new-${Date.now()}-${index}`,
           url: item.url || '',
@@ -72,8 +72,9 @@ export function VPNImport() {
         setCredentials([...credentials, ...newCredentials]);
         toast.success(`Imported ${newCredentials.length} credentials`);
         break;
+      }
       
-      case 'workers':
+      case 'workers': {
         const newWorkers = data.map((item, index) => ({
           id: `new-${Date.now()}-${index}`,
           ip: item.ip || '',
@@ -85,6 +86,7 @@ export function VPNImport() {
         setWorkers([...workers, ...newWorkers]);
         toast.success(`Imported ${newWorkers.length} workers`);
         break;
+      }
       
       default:
         toast.error('Import type not implemented');

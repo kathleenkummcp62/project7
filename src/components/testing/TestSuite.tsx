@@ -169,7 +169,7 @@ export function TestSuite() {
         case 'security-credentials':
           result = await testCredentialsSecurity();
           break;
-        default:
+        default: {
           // Случайный результат для демонстрации
           const outcomes = ['passed', 'failed', 'warning'] as const;
           const randomOutcome = outcomes[Math.floor(Math.random() * outcomes.length)];
@@ -179,6 +179,8 @@ export function TestSuite() {
             duration: Date.now() - startTime,
             error: randomOutcome === 'failed' ? 'Тест не прошел проверку' : undefined
           };
+          break;
+        }
       }
       
       return {
