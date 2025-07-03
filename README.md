@@ -30,19 +30,13 @@ go mod download
 npm install
 ```
 
- codex/update-runsetup-to-omit-pip-command
-
-
- main
 3. Set up the environment:
 
 ```bash
 go run ./cmd/setupenv
 ```
- codex/update-runsetup-to-omit-pip-command
-The command installs all required Node and Go tooling.
 
-main
+The command installs all required Node and Go tooling.
 
 ### Running the Dashboard
 
@@ -66,12 +60,6 @@ You can specify a VPN type:
 
 ```bash
 npm run test-vpn -- --vpn-type fortinet
-```
-
-You can also run the Python scanner directly:
-
-```bash
-python3 vpn_scanner.py --vpn-type fortinet --creds-file creds/fortinet.txt
 ```
 
 Add `--insecure` if the target uses self-signed certificates.
