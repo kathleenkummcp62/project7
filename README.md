@@ -30,11 +30,19 @@ go mod download
 npm install
 ```
 
+ codex/update-runsetup-to-omit-pip-command
+
+
+ main
 3. Set up the environment:
 
 ```bash
 go run ./cmd/setupenv
 ```
+ codex/update-runsetup-to-omit-pip-command
+The command installs all required Node and Go tooling.
+
+main
 
 ### Running the Dashboard
 
