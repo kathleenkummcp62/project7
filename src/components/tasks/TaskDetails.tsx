@@ -14,7 +14,7 @@ import {
   Play,
   AlertTriangle
 } from 'lucide-react';
-import { Task } from '../../store/slices/tasksSlice';
+import { Task } from '../../types';
 
 interface TaskDetailsProps {
   task: Task;

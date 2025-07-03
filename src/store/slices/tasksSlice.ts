@@ -1,26 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import toast from 'react-hot-toast';
-
-export interface Attachment {
-  name: string;
-  size: number;
-  type: string;
-  lastModified: string;
-}
-
-export interface Task {
-  id: string;
-  name: string;
-  description: string;
-  vpnType: string;
-  priority: 'low' | 'medium' | 'high';
-  deadline: string;
-  targets: string[];
-  workers: string[];
-  status: 'pending' | 'running' | 'completed' | 'error';
-  createdAt: string;
-  attachments: Attachment[];
-}
+import { Task } from '../../types';
 
 interface TasksState {
   tasks: Task[];
