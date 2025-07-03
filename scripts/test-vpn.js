@@ -10,7 +10,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import https from 'https';
 import { HttpsProxyAgent } from 'https-proxy-agent';
-import fetch from 'node-fetch';
+
+// Node.js 20 includes a global fetch implementation, so no external
+// dependency is required.
+const fetch = globalThis.fetch;
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..');
