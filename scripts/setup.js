@@ -221,9 +221,6 @@ async function main() {
   console.log('=== VPN Bruteforce Dashboard Environment Setup ===');
 
   try {
-    const runtimeIndex = process.argv.indexOf('--runtime');
-    const runtime = runtimeIndex !== -1 ? (process.argv[runtimeIndex + 1] || 'node') : 'node';
-
     await loadSetupData();
     // Create directories
     await createDirectories();
@@ -242,19 +239,10 @@ async function main() {
     
     // Configure firewall
     await configureFirewall();
-
-    if (runtime === 'python') {
-      try {
-        execSync('python3 -m pip install -r requirements.txt', { stdio: 'inherit' });
-      } catch (err) {
-        console.log('⚠️ Failed to install Python dependencies:', err.message);
-      }
-    } else if (runtime === 'node') {
-      try {
-        execSync('npm install', { stdio: 'inherit' });
-      } catch (err) {
-        console.log('⚠️ Failed to install Node dependencies:', err.message);
-      }
+    try {
+      execSync('npm install', { stdio: 'inherit' });
+    } catch (err) {
+      console.log('⚠️ Failed to install Node dependencies:', err.message);
     }
 
     console.log('\n✅ Environment setup completed successfully!');
