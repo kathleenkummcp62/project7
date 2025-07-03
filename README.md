@@ -89,10 +89,22 @@ npm run collect-results
 > **Note**: Some Go tests use an embedded Postgres instance that cannot run as
 > the root user. Run the test suite under a regular account.
 
+Before running the test suite make sure all dependencies are installed:
+
+```bash
+npm install
+```
+
 Run frontend tests with Vitest:
 
 ```bash
 npm test
+```
+
+To run all test files explicitly use:
+
+```bash
+npm run test:all
 ```
 
 ## Project Structure
