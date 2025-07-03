@@ -1,0 +1,4 @@
+paramiko
+aiohttp
+aiofiles
+pytest-asyncio
