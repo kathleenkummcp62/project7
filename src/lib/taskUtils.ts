@@ -1,4 +1,4 @@
-import { Task } from '../store/slices/tasksSlice';
+import { Task } from '../types';
 import toast from 'react-hot-toast';
 
 /**

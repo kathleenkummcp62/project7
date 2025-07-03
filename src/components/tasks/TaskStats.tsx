@@ -8,7 +8,7 @@ import {
   Server, 
   Shield 
 } from 'lucide-react';
-import { Task } from '../../store/slices/tasksSlice';
+import { Task } from '../../types';
 
 interface TaskStatsProps {
   tasks: Task[];
