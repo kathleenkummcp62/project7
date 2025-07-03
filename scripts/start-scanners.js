@@ -44,15 +44,15 @@ async function parseCredentialsFile(filePath) {
 // Get script name for VPN type
 function getScriptForVpnType(vpnType) {
   const scripts = {
-    'fortinet': 'sers1.py',
-    'paloalto': 'sers2.go',
-    'sonicwall': 'sers3.py',
-    'sophos': 'test_scanner.py --vpn-type sophos',
-    'watchguard': 'test_scanner.py --vpn-type watchguard',
-    'cisco': 'sers4.go'
+    'fortinet': 'sers1',
+    'paloalto': 'sers2',
+    'sonicwall': 'sers3',
+    'sophos': 'test_scanner --vpn-type sophos',
+    'watchguard': 'test_scanner --vpn-type watchguard',
+    'cisco': 'sers4'
   };
   
-  return scripts[vpnType.toLowerCase()] || `test_scanner.py --vpn-type ${vpnType}`;
+  return scripts[vpnType.toLowerCase()] || `test_scanner --vpn-type ${vpnType}`;
 }
 
 // Start scanner on a server
@@ -68,14 +68,7 @@ async function startScannerOnServer(server, vpnType) {
     const remoteDir = '/root/NAM/Servis';
     
     // Construct command
-    let cmd;
-    if (script.endsWith('.py')) {
-      cmd = `cd ${remoteDir} && python3 ${script}`;
-    } else if (script.endsWith('.go')) {
-      cmd = `cd ${remoteDir} && go run ${script}`;
-    } else {
-      cmd = `cd ${remoteDir} && ./${script}`;
-    }
+    const cmd = `cd ${remoteDir} && ./${script}`;
     
     console.log(`📋 Command: ${cmd}`);
     
